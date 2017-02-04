@@ -3,6 +3,9 @@ GEM
   specs:
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
+    coderay (1.1.1)
+    coolline (0.5.0)
+      unicode_utils (~> 1.4)
     domain_name (0.5.20161129)
       unf (>= 0.0.5, < 1.0.0)
     http (0.9.9)
@@ -16,16 +19,27 @@ GEM
     http_parser.rb (0.6.0)
     ipfs (0.0.4)
       http (~> 0.9.6)
+    method_source (0.8.2)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-coolline (0.2.5)
+      coolline (~> 0.5)
     public_suffix (2.0.5)
+    slop (3.6.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
+    unicode_utils (1.4.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   ipfs
+  pry
+  pry-coolline
 
 BUNDLED WITH
    1.14.3
