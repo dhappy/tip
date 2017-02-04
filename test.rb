@@ -3,7 +3,10 @@
 require 'pry'
 require 'ipfs/client'
 
-cli = IPFS::Client.new host: 'http://ipfs.io', port: 80
+host, port = 'http://ipfs.io', 80
+host, port = 'http://localhost', 5001
+
+cli = IPFS::Client.new host: host, port: port
 results = cli.ls 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG'
 links = results.collect(&:links).flatten
 
@@ -16,4 +19,4 @@ links.find{ |link| link.name == 'readme' }.tap do |readme|
   puts content
 end
 
-
+res = cli.add $0
