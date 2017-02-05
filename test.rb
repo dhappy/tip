@@ -2,6 +2,7 @@
 
 require 'pry'
 require 'ipfs/client'
+require 'net/http/post/multipart'
 
 host, port = 'http://ipfs.io', 80
 host, port = 'http://localhost', 5001
@@ -19,4 +20,16 @@ links.find{ |link| link.name == 'readme' }.tap do |readme|
   puts content
 end
 
-res = cli.add $0
+url = URI.parse("#{cli.api_url}/add")
+request = Net::HTTP::Post::Multipart.new(
+  url.path,
+  file1: UploadIO.new(File.new('README.md'), 'plain/text', 'README.md'),
+  file2: UploadIO.new(File.new('test.rb'), 'plain/text', 'test/test.rb')
+)
+response = Net::HTTP.start(url.host, url.port) { |http| http.request(request) }
+
+puts response.body
+
+#binding.pry
+
+#res = cli.add $0
