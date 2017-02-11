@@ -8,26 +8,26 @@ host, port = 'http://ipfs.io', 80
 host, port = 'http://localhost', 5001
 
 @cli = IPFS::Client.new host: host, port: port
-hashes = ['QmZ8qhLpcZkF3JZ6zmrZCgVn5d54P78fFJ4BTWjR38zZ51',
-          'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',
-          'QmP9xigWettR229mBvq2oFbSqhZ3PVijVGAyqPwTRfJ718',
-         ]
+hashes = [
+  'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',
+  'QmP9xigWettR229mBvq2oFbSqhZ3PVijVGAyqPwTRfJ718',
+  'QmZ8qhLpcZkF3JZ6zmrZCgVn5d54P78fFJ4BTWjR38zZ51',
+  'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',
+]
 
 def print_hash(hash, pad = '')
   links = @cli.ls(hash).collect(&:links).flatten
 
-  print "#{pad}#{hash} (#{links.count})"
-
-  pad += '  '
-
   if not links.empty?
-    puts ':'
+    puts "#{pad}#{hash} (#{links.count}):"
+
+    pad += '  '
+
     links.each do |entry|
       puts "#{pad}#{entry.name} (#{entry.hashcode})"
       print_hash entry.hashcode, pad
     end
   else
-    puts
     puts @cli.cat hash
   end
 end
