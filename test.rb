@@ -1,38 +1,60 @@
 #!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 
 require 'pry'
 require 'ipfs/client'
 require 'net/http/post/multipart'
+require 'ostruct'
 
-host, port = 'http://ipfs.io', 80
-host, port = 'http://localhost', 5001
+@host, @port = 'http://ipfs.io', 80
+@host, @port = 'http://localhost', 5001
 
-@cli = IPFS::Client.new host: host, port: port
+@cli = IPFS::Client.new host: @host, port: @port
 hashes = [
-  'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',
-  'QmP9xigWettR229mBvq2oFbSqhZ3PVijVGAyqPwTRfJ718',
-  'QmZ8qhLpcZkF3JZ6zmrZCgVn5d54P78fFJ4BTWjR38zZ51',
-  'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',
+  'QmaCA9KqX9zrjcRCo9LE6mGHKnZ4Fjwv26eyLPEyhC3iRt',
+  'QmZbF7ZqXvTXwiwhaJWMUQMJtFt3HvGWiZeBM5TFdo9TMu',
+#  'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',
+#  'QmP9xigWettR229mBvq2oFbSqhZ3PVijVGAyqPwTRfJ718',
+#  'QmZ8qhLpcZkF3JZ6zmrZCgVn5d54P78fFJ4BTWjR38zZ51',
+#  'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG',
 ]
 
-def print_hash(hash, pad = '')
-  links = @cli.ls(hash).collect(&:links).flatten
+def print_entry(entry, pad = '')
+  links = @cli.ls(entry.hashcode).collect(&:links).flatten
 
   if not links.empty?
-    puts "#{pad}#{hash} (#{links.count}):"
+    puts "#{pad}#{entry.hashcode} (#{links.count}):"
 
     pad += '  '
-
-    links.each do |entry|
-      puts "#{pad}#{entry.name} (#{entry.hashcode})"
-      print_hash entry.hashcode, pad
+    
+    links.each do |link|
+      link = OpenStruct.new({
+        hashcode: link.hashcode,
+        name: link.name,
+        size: link.size
+      }).tap do |link|
+        link.tree = "#{entry.tree}#{entry.tree ? '/' : 
+ ''}#{link.name}"
+      end
+      puts "#{pad}#{link.name} (#{link.hashcode})"
+      print_entry link, pad
     end
   else
-    puts @cli.cat hash
+    query = "#{@host}:#{@port}/api/v0/block/get?arg=#{entry.hashcode}"
+    ret = Net::HTTP.get(URI.parse(query))
+    
+    if ret.unpack('C*').first == 10 # really rough symlink check
+      puts "Link: #{entry.tree} → #{ret[6..-1].force_encoding('utf-8')}"
+    end
+
+    #binding.pry; exit
+    #IO.write(entry.name, ret.to_s)
   end
 end
 
-hashes.each { |hash| print_hash hash }
+hashes.each do |hash|
+  print_entry OpenStruct.new(hashcode: hash)
+end
 
 #binding.pry; exit
 
