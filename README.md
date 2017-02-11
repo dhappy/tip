@@ -29,6 +29,7 @@ With an ordered set of symlinks:
 * 1 → ipfs:QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG
 * 2 → ipfs:QmP9xigWettR229mBvq2oFbSqhZ3PVijVGAyqPwTRfJ718
 * 3 → ipns:dhappy.org/.../
+* 4 → ipfs:QmZ8qhLpcZkF3JZ6zmrZCgVn5d54P78fFJ4BTWjR38zZ51
 
 When someone attempts to resolve .../book/Frank Herbert: Dune/ the systems goes down the list checking each entry for /book/Frank Herbert: Dune/.
 
