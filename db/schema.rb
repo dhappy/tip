@@ -11,12 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212211236) do
+ActiveRecord::Schema.define(version: 20170212211839) do
+
+  create_table "directories", force: :cascade do |t|
+    t.integer  "entries"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "entries", force: :cascade do |t|
     t.integer  "parents"
     t.string   "names",      default: "--- []\n"
-    t.string   "hash"
+    t.string   "code"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
   end

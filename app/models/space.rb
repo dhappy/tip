@@ -1,4 +1,11 @@
 class Space < ActiveRecord::Base
+  def initialize
+    @host, @port = 'http://ipfs.io', 80
+    @host, @port = 'http://localhost', 5001
+
+    @cli = IPFS::Client.new host: @host, port: @port
+  end
+
   # A hash may be:
   #  * a directory
   #  * a json array of hashes (ToDo: namespaced xml)
@@ -6,14 +13,18 @@ class Space < ActiveRecord::Base
   #  * another file
   #  * dereferencable
   def lookup(hash, dir = nil, name = nil)
-    return entry if entry = Entry.find(hash) # ToDo: collisions
+    entry = Entry.find_by(code: hash) # ToDo: collisions
+
+    binding.pry
 
     res = @cli.ls(hash)
 
     links = res.collect(&:links).flatten
 
     if links.any? # Directory
-      entry = Directory.find_or_create(hash)
+      entry = Directory.find_or_create_by(code: hash)
+
+      binding.pry
 
       entry.parents += dir
 

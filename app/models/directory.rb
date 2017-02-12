@@ -1,0 +1,2 @@
+class Directory < Entry
+end

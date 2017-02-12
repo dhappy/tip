@@ -3,7 +3,7 @@ class CreateEntries < ActiveRecord::Migration
     create_table :entries do |t|
       t.integer :parents, array: true, default: []
       t.string :names, array: true, default: []
-      t.string :hash
+      t.string :code
 
       t.timestamps null: false
     end
