@@ -64,9 +64,10 @@ class LookupController < ApplicationController
       data = JSON.parse(entry.content)
 
       if data.kind_of?(Array)
-        if data.inject(true) do |string?, datum|
-            string? && datum.kind_of?(String)
-          end
+        strings = data.inject(true) do |string, datum|
+          string && datum.kind_of?(String)
+        end
+        if strings
           entry = Conglomeration.new(hash)
 
           data.each do |str| # This is terribly dangerous
