@@ -1,7 +1,7 @@
 class CreateSpaces < ActiveRecord::Migration
   def change
     create_table :spaces do |t|
-      t.array :entries
+      t.integer :entries, array: true, default: []
 
       t.timestamps null: false
     end
