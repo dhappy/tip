@@ -3,5 +3,4 @@
 - if @links.any?
   %ul
     - @links.each do |link|
-      -# binding.pry
       %li= link_to link.name, "/l/#{link.hashcode}"
