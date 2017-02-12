@@ -5,6 +5,10 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'lookup#root'
 
+  get 'l/:hash' => 'lookup#hash'
+
+  get 'l/:code' => 'lookup#code'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

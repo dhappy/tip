@@ -3,7 +3,7 @@
 
 require 'pry'
 require 'ipfs/client'
-require 'net/http/post/multipart'
+require 'net/http'
 require 'ostruct'
 
 @host, @port = 'http://ipfs.io', 80
@@ -43,7 +43,7 @@ def print_entry(entry, pad = '')
     query = "#{@host}:#{@port}/api/v0/block/get?arg=#{entry.hashcode}"
     ret = Net::HTTP.get(URI.parse(query))
     
-    if ret.unpack('C*').first == 10 # really rough symlink check
+    if ret.length > 6 && ret.unpack('C*').first == 10 # really rough symlink check
       puts "Link: #{entry.tree} → #{ret[6..-1].force_encoding('utf-8')}"
     end
 
