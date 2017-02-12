@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212180116) do
+ActiveRecord::Schema.define(version: 20170212211236) do
+
+  create_table "entries", force: :cascade do |t|
+    t.integer  "parents"
+    t.string   "names",      default: "--- []\n"
+    t.string   "hash"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
 
   create_table "spaces", force: :cascade do |t|
     t.integer  "entries"
