@@ -5,7 +5,7 @@ class LookupController < ApplicationController
     @host, @port = 'http://ipfs.io', 80
     @host, @port = 'http://localhost', 5001
 
-    @source = Source.new
+    @space = Space.new
 
     @cli = IPFS::Client.new host: @host, port: @port
   end
