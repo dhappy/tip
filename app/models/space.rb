@@ -1,5 +1,11 @@
+require 'ipfs/client'
+
 class Space < ActiveRecord::Base
+  has_and_belongs_to_many :entries
+
   def initialize
+    super
+
     @host, @port = 'http://ipfs.io', 80
     @host, @port = 'http://localhost', 5001
 
@@ -15,16 +21,12 @@ class Space < ActiveRecord::Base
   def lookup(hash, dir = nil, name = nil)
     entry = Entry.find_by(code: hash) # ToDo: collisions
 
-    binding.pry
-
     res = @cli.ls(hash)
 
     links = res.collect(&:links).flatten
 
     if links.any? # Directory
       entry = Directory.find_or_create_by(code: hash)
-
-      binding.pry
 
       entry.parents += dir
 
@@ -34,8 +36,6 @@ class Space < ActiveRecord::Base
     else
       query = "#{@host}:#{@port}/api/v0/block/get?arg=#{entry.hashcode}"
       ret = Net::HTTP.get(URI.parse(query))
-      
-      binding.pry
 
       if ret.length > 6 && ret[0] == 10 # symlink?
         dest = ret[6..-1].force_encoding('utf-8')

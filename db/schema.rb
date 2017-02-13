@@ -20,15 +20,18 @@ ActiveRecord::Schema.define(version: 20170212211839) do
   end
 
   create_table "entries", force: :cascade do |t|
-    t.integer  "parents"
     t.string   "names",      default: "--- []\n"
     t.string   "code"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
   end
 
+  create_table "entries_spaces", id: false, force: :cascade do |t|
+    t.integer "entry_id", null: false
+    t.integer "space_id", null: false
+  end
+
   create_table "spaces", force: :cascade do |t|
-    t.integer  "entries"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

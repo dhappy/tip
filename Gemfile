@@ -14,7 +14,9 @@ gem 'coffee-rails', '~> 4.1.0'
 
 gem 'haml-rails'
 
-gem 'ruby-filemagic'
+gem 'nokogiri', '~> 1.6.7'
+gem 'tzinfo-data'
+#gem 'ruby-filemagic'
 gem 'ipfs'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes

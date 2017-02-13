@@ -12,6 +12,4 @@ class LookupController < ApplicationController
     @hash = params[:hash]
     @entry = @space.lookup(@hash)
   end
-
-  protected
 end
