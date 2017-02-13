@@ -7,7 +7,6 @@ class Space < ActiveRecord::Base
     super
 
     @host, @port = 'http://ipfs.io', 80
-    @host, @port = 'http://208.113.164.31', 80
     #@host, @port = 'http://localhost', 5001
 
     @cli = IPFS::Client.new host: @host, port: @port
