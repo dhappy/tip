@@ -10,6 +10,6 @@ class LookupController < ApplicationController
 
   def hash
     @hash = params[:hash]
-    @entry = @space.lookup(@hash)
+    @links = @entry = @space.lookup(@hash)
   end
 end

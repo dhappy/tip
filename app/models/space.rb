@@ -7,7 +7,8 @@ class Space < ActiveRecord::Base
     super
 
     @host, @port = 'http://ipfs.io', 80
-    @host, @port = 'http://localhost', 5001
+    @host, @port = 'http://208.113.164.31', 80
+    #@host, @port = 'http://localhost', 5001
 
     @cli = IPFS::Client.new host: @host, port: @port
   end
@@ -19,11 +20,11 @@ class Space < ActiveRecord::Base
   #  * another file
   #  * dereferencable
   def lookup(hash, dir = nil, name = nil)
-    entry = Entry.find_by(code: hash) # ToDo: collisions
-
     res = @cli.ls(hash)
 
-    links = res.collect(&:links).flatten
+    return links = res.collect(&:links).flatten
+
+    entry = Entry.find_by(code: hash) # ToDo: collisions
 
     if links.any? # Directory
       entry = Directory.find_or_create_by(code: hash)
