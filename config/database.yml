@@ -4,13 +4,13 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 #
-default: &default
+default: &sqlite
   adapter: sqlite3
   pool: 5
   timeout: 5000
 
 development:
-  <<: *default
+  <<: *sqlite
   database: db/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
@@ -21,5 +21,6 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
