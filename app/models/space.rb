@@ -19,14 +19,18 @@ class Space < ActiveRecord::Base
   #  * another file
   #  * dereferencable
   def lookup(hash, dir = nil, name = nil)
+    entry = Entry.find_by(code: hash) # ToDo: collisions
+
     res = @cli.ls(hash)
 
-    return links = res.collect(&:links).flatten
-
-    entry = Entry.find_by(code: hash) # ToDo: collisions
+    links = res.collect(&:links).flatten
 
     if links.any? # Directory
       entry = Directory.find_or_create_by(code: hash)
+
+      binding.pry
+
+      return links
 
       entry.parents += dir
 

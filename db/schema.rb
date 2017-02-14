@@ -13,9 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20170212211839) do
 
-  create_table "directories", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "directories_entries", force: :cascade do |t|
+    t.integer "directory_id"
+    t.integer "entry_id"
   end
 
   create_table "entries", force: :cascade do |t|
