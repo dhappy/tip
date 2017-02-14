@@ -23,7 +23,7 @@ class Space < ActiveRecord::Base
 
     res = @cli.ls(hash)
 
-    links = res.collect(&:links).flatten
+    return links = res.collect(&:links).flatten
 
     if links.any? # Directory
       entry = Directory.find_or_create_by(code: hash)
