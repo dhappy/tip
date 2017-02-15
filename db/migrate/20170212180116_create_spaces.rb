@@ -5,9 +5,9 @@ class CreateSpaces < ActiveRecord::Migration
     end
 
     create_table :entries do |t|
-      t.string :names, array: true, default: []
       t.string :code
-
+      t.string :type # For Single-Table Inheritance
+      
       t.timestamps null: false
     end
 

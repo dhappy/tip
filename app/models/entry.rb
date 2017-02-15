@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class Entry < ActiveRecord::Base
   has_and_belongs_to_many :spaces
   has_and_belongs_to_many(
@@ -8,4 +10,10 @@ class Entry < ActiveRecord::Base
   )
 
   serialize :names, Array
+
+  def mime
+    OpenStruct.new({
+      types: []
+    })
+  end
 end

@@ -21,6 +21,8 @@ class Space < ActiveRecord::Base
   def lookup(hash, dir = nil, name = nil)
     entry = Entry.find_by(code: hash) # ToDo: collisions
 
+    return entry if entry
+
     res = @cli.ls(hash)
 
     links = res.collect(&:links).flatten
@@ -28,31 +30,30 @@ class Space < ActiveRecord::Base
     if links.any? # Directory
       entry = Directory.find_or_create_by(code: hash)
 
-      binding.pry
-
-      return links
-
-      entry.parents += dir
-
       links.each do |link|
         lookup(link.hashcode, entry, link.name)
       end
     else
-      query = "#{@host}:#{@port}/api/v0/block/get?arg=#{entry.hashcode}"
+      query = "#{@host}:#{@port}/api/v0/block/get?arg=#{hash}"
       ret = Net::HTTP.get(URI.parse(query))
 
       if ret.length > 6 && ret[0] == 10 # symlink?
         dest = ret[6..-1].force_encoding('utf-8')
 
-        entry = Link.find_or_create(dest)
+        entry = Link.find_or_create_by(dest)
       else
-        entry = Blob.find_or_create(hash)
+        entry = Blob.find_or_create_by(code: hash)
       end
     end
 
-    entry.names += name if entry
-    dir.entries += entry if dir
-    @space.entries += entry
+    if entry
+      entry.names += [name]
+      self.entries += [entry]
+      if dir
+        entry.parents += [dir]
+        dir.entries += [entry]
+      end
+    end
 
     if entry.mime.types.include?('application/json')
       data = JSON.parse(entry.content)
@@ -71,6 +72,6 @@ class Space < ActiveRecord::Base
       end
     end
 
-    entry
+    entry.save
   end
 end
