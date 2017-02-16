@@ -13,23 +13,31 @@
 
 ActiveRecord::Schema.define(version: 20170212211839) do
 
-  create_table "directories_entries", force: :cascade do |t|
-    t.integer "directory_id"
-    t.integer "entry_id"
+  create_table "directories_references", id: false, force: :cascade do |t|
+    t.integer "directory_id", null: false
+    t.integer "reference_id", null: false
   end
 
   create_table "entries", force: :cascade do |t|
-    t.string   "names",      default: "--- []\n"
     t.string   "code"
     t.string   "type"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "entries_spaces", id: false, force: :cascade do |t|
     t.integer "entry_id", null: false
     t.integer "space_id", null: false
   end
+
+  create_table "references", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "entry_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "references", ["entry_id"], name: "index_references_on_entry_id"
 
   create_table "spaces", force: :cascade do |t|
     t.datetime "created_at", null: false

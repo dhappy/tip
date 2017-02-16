@@ -1,8 +1,8 @@
 %h1= @hash
 
-- if @entry.try(:entries)
+- if @entry.try(:references)
   %ul
-    - @entry.entries.each do |link|
-      %li= link_to link.names.last, "/l/#{link.code}"
+    - @entry.references.each do |ref|
+      %li= link_to ref.name, "/l/#{ref.entry.code}"
 - else
   %h1 blob

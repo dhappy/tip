@@ -7,7 +7,6 @@ class Space < ActiveRecord::Base
     super
 
     @host, @port = 'http://ipfs.io', 80
-    #@host, @port = 'http://localhost', 5001
 
     @cli = IPFS::Client.new host: @host, port: @port
   end
@@ -31,7 +30,10 @@ class Space < ActiveRecord::Base
       entry = Directory.find_or_create_by(code: hash)
 
       links.each do |link|
-        lookup(link.hashcode, entry, link.name)
+        entry.references += [Reference.find_or_create_by({
+          name: link.name,
+          entry: lookup(link.hashcode, entry)
+        })]
       end
     else
       query = "#{@host}:#{@port}/api/v0/block/get?arg=#{hash}"
@@ -45,15 +47,8 @@ class Space < ActiveRecord::Base
         entry = Blob.find_or_create_by(code: hash)
       end
     end
-
-    if entry
-      entry.names += [name]
-      self.entries += [entry]
-      if dir
-        entry.parents += [dir]
-        dir.entries += [entry]
-      end
-    end
+    
+    self.entries += [entry]
 
     if entry.mime.types.include?('application/json')
       data = JSON.parse(entry.content)
@@ -73,5 +68,7 @@ class Space < ActiveRecord::Base
     end
 
     entry.save
+
+    entry
   end
 end
