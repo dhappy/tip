@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212211839) do
+ActiveRecord::Schema.define(version: 20170216205547) do
 
   create_table "directories_references", id: false, force: :cascade do |t|
     t.integer "directory_id", null: false
@@ -21,8 +21,9 @@ ActiveRecord::Schema.define(version: 20170212211839) do
   create_table "entries", force: :cascade do |t|
     t.string   "code"
     t.string   "type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "destination"
   end
 
   create_table "entries_spaces", id: false, force: :cascade do |t|

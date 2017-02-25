@@ -22,5 +22,12 @@ module Tip
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.tip = DeepStruct.wrap({
+                                   ipfs: {
+                                     host: 'http://ipfs.io',
+                                     port: 80
+                                   }
+                                })
   end
 end

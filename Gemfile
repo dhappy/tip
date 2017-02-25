@@ -14,11 +14,12 @@ gem 'haml-rails'
 
 gem 'nokogiri', '~> 1.6.7'
 gem 'tzinfo-data'
-#gem 'ruby-filemagic'
+gem 'ruby-filemagic'
 gem 'ipfs'
+gem 'deepstruct'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
+gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

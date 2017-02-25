@@ -1,8 +1,10 @@
 %h1= @hash
 
-- if @entry.try(:references)
+- if @entry.kind_of?(Directory)
   %ul
     - @entry.references.each do |ref|
       %li= link_to ref.name, "/l/#{ref.entry.code}"
+- elsif @entry.kind_of?(Link)
+  %h2= "Link: #{@entry.destination}"
 - else
-  %h1 blob
+  %h2 Blob

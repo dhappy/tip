@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :links
+
   resources :references
 
   resources :directories

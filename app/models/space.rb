@@ -1,15 +1,9 @@
+require 'net/http'
 require 'ipfs/client'
+require 'filemagic'
 
 class Space < ActiveRecord::Base
   has_and_belongs_to_many :entries
-
-  def initialize
-    super
-
-    @host, @port = 'http://ipfs.io', 80
-
-    @cli = IPFS::Client.new host: @host, port: @port
-  end
 
   # A hash may be:
   #  * a directory
@@ -17,58 +11,45 @@ class Space < ActiveRecord::Base
   #  * a link
   #  * another file
   #  * dereferencable
-  def lookup(hash, dir = nil, name = nil)
+  def lookup(hash)
     entry = Entry.find_by(code: hash) # ToDo: collisions
 
+    Entry.ls(hash)
+    
     return entry if entry
 
-    res = @cli.ls(hash)
-
-    links = res.collect(&:links).flatten
-
-    if links.any? # Directory
-      entry = Directory.find_or_create_by(code: hash)
-
-      links.each do |link|
-        entry.references += [Reference.find_or_create_by({
-          name: link.name,
-          entry: lookup(link.hashcode, entry)
-        })]
-      end
+    
+    
+    query = "#{@host}:#{@port}/api/v0/block/get?arg=#{hash}"
+    ret = Net::HTTP.get(URI.parse(query))
+    
+    FileMagic.open(:mime) { |fm| puts fm.buffer(ret) }
+    
+    if ret.length > 6 && ret[0..1] == "\n\u0010" # symlink?
+      dest = ret[6..-1].force_encoding('utf-8')
+      
+      entry = Link.find_or_create_by({
+                                       code: hash,
+                                       destination: dest
+                                     })
     else
-      query = "#{@host}:#{@port}/api/v0/block/get?arg=#{hash}"
-      ret = Net::HTTP.get(URI.parse(query))
-
-      if ret.length > 6 && ret[0] == 10 # symlink?
-        dest = ret[6..-1].force_encoding('utf-8')
-
-        entry = Link.find_or_create_by(dest)
-      else
-        entry = Blob.find_or_create_by(code: hash)
+      entry = Blob.find_or_create_by(code: hash)
+    end
+  
+    self.entries += [entry]
+  
+    if entry.mime.types.include?('text/xml+conglom')
+      data = JSON.parse(entry.content)
+      
+      entry = Conglomeration.new(hash)
+        
+      data.each do |str| # This is terribly dangerous
+        entry.entries += lookup(str, dir)
       end
     end
     
-    self.entries += [entry]
-
-    if entry.mime.types.include?('application/json')
-      data = JSON.parse(entry.content)
-
-      if data.kind_of?(Array)
-        strings = data.inject(true) do |string, datum|
-          string && datum.kind_of?(String)
-        end
-        if strings
-          entry = Conglomeration.new(hash)
-
-          data.each do |str| # This is terribly dangerous
-            entry.entries += lookup(str, dir)
-          end
-        end
-      end
-    end
-
     entry.save
-
+    
     entry
   end
 end

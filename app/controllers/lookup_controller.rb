@@ -10,6 +10,7 @@ class LookupController < ApplicationController
 
   def hash
     @hash = params[:hash]
-    @links = @entry = @space.lookup(@hash)
+    @entry = Entry.ls(@hash)
+    @entry = Entry.find_or_create_by(code: @hash)
   end
 end
