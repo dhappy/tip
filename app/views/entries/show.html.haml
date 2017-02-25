@@ -4,15 +4,17 @@
   %ul
     - @entry.references.each do |ref|
       %li{ item: { type: ref.entry.type.downcase } }
-        = link_to ref.name, "/l/#{ref.entry.code}"
+        = link_to ref.name, "/e/#{ref.entry.code}"
 - elsif @entry.kind_of?(Link)
   %h2= "Link: #{@entry.destination}"
 - else
   %h2 Blob
 
-%h2 Parents:
+- if @entry.parents.any?
+  %h2 References:
 
-%ul
-  - @entry.parents.each do |ref|
-    %li{ item: { type: ref.entry.type.downcase } }
-      = link_to ref.name, "/l/#{ref.entry.code}"
+  %ul
+    - @entry.parents.each do |ref|
+      - ref.directories.each do |dir|
+        %li{ item: { type: ref.entry.type.downcase } }
+          = link_to "#{ref.name} (in #{dir.code})", "/e/#{dir.code}"

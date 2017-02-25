@@ -17,6 +17,8 @@ gem 'tzinfo-data'
 gem 'deepstruct'
 gem 'ipfs'
 
+gem 'devise'
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
 
