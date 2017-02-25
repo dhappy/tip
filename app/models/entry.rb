@@ -12,6 +12,10 @@ class Entry < ActiveRecord::Base
   )
 
   @base_find_or_create_by = self.method(:find_or_create_by)
+
+  def types
+    %w{DNE Directory Blob Ukn Link}
+  end
   
   def self.find_or_create_by(args)
     if args.length == 1 && args[:code]
@@ -22,23 +26,9 @@ class Entry < ActiveRecord::Base
         links = listing[:Objects].collect{ |o| o[:Links] }.flatten
         
         if links
-          entry = Directory.create({ code: hash })
-          
-          entry.references += links.map do |link|
-            Reference.find_or_create_by(
-              {
-                name: link[:Name],
-                entry: Entry.find_or_create_by(
-                  {
-                    code: link[:Hash],
-                    type: @types[link[:Type]]
-                  }
-                )
-              }
-            )
-          end
+          entry = Directory.create({ code: args[:code] })
         else
-          logger.info("Unhandled Hash Return: #{hash}")
+          logger.info("Unhandled Hash Return: #{args[:code]}")
         end
       end
     end
@@ -61,18 +51,3 @@ class Entry < ActiveRecord::Base
     JSON.parse(Net::HTTP.get(URI.parse(query)), symbolize_names: true)
   end
 end
-
-module CreateEntry
-  def self.included base
-    base_find_or_create_by = base.method(:find_or_create_by)
-    
-    base.define_singleton_method(:find_or_create_by) do
-      if args.length == 1 && args[:code]
-        binding.pry
-      end
-      base_find_or_create_by.call(args)
-    end
-  end
-end
-
-#Entry.send(:include, CreateEntry)
