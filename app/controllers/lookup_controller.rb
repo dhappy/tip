@@ -1,6 +1,6 @@
-require 'ipfs/client'
-
 class LookupController < ApplicationController
+  layout :application
+
   def initialize
     @space = Space.new
   end
@@ -10,7 +10,6 @@ class LookupController < ApplicationController
 
   def hash
     @hash = params[:hash]
-    @entry = Entry.ls(@hash)
     @entry = Entry.find_or_create_by(code: @hash)
   end
 end

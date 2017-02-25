@@ -1,6 +1,5 @@
 require 'net/http'
 require 'ipfs/client'
-require 'filemagic'
 
 class Space < ActiveRecord::Base
   has_and_belongs_to_many :entries
@@ -17,8 +16,6 @@ class Space < ActiveRecord::Base
     Entry.ls(hash)
     
     return entry if entry
-
-    
     
     query = "#{@host}:#{@port}/api/v0/block/get?arg=#{hash}"
     ret = Net::HTTP.get(URI.parse(query))

@@ -3,7 +3,8 @@
 - if @entry.kind_of?(Directory)
   %ul
     - @entry.references.each do |ref|
-      %li= link_to ref.name, "/l/#{ref.entry.code}"
+      %li{ item: { type: ref.entry.type.downcase } }
+        = link_to ref.name, "/l/#{ref.entry.code}"
 - elsif @entry.kind_of?(Link)
   %h2= "Link: #{@entry.destination}"
 - else
