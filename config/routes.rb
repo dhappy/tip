@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :directories
 
-  resources :entries
+  resources :entries, path: :e
 
   resources :spaces
 

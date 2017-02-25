@@ -1,0 +1,18 @@
+%h1= @hash
+
+- if @entry.kind_of?(Directory)
+  %ul
+    - @entry.references.each do |ref|
+      %li{ item: { type: ref.entry.type.downcase } }
+        = link_to ref.name, "/l/#{ref.entry.code}"
+- elsif @entry.kind_of?(Link)
+  %h2= "Link: #{@entry.destination}"
+- else
+  %h2 Blob
+
+%h2 Parents:
+
+%ul
+  - @entry.parents.each do |ref|
+    %li{ item: { type: ref.entry.type.downcase } }
+      = link_to ref.name, "/l/#{ref.entry.code}"

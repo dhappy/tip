@@ -15,6 +15,7 @@ gem 'haml-rails'
 gem 'nokogiri', '~> 1.6.7'
 gem 'tzinfo-data'
 gem 'deepstruct'
+gem 'ipfs'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
