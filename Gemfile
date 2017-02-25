@@ -14,8 +14,6 @@ gem 'haml-rails'
 
 gem 'nokogiri', '~> 1.6.7'
 gem 'tzinfo-data'
-gem 'ruby-filemagic'
-gem 'ipfs'
 gem 'deepstruct'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
