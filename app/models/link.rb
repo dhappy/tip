@@ -2,7 +2,6 @@ require 'net/http'
 
 class Link < Entry
   def destination
-    binding.pry
     if not super
       query = "#{@config.host}:#{@config.port}/api/v0/block/get?arg=#{code}"
       ret = Net::HTTP.get(URI.parse(query))

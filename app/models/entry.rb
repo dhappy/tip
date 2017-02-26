@@ -1,6 +1,5 @@
 require 'ostruct'
 require 'deepstruct'
-require 'pry'
 
 class Entry < ActiveRecord::Base
   has_and_belongs_to_many :spaces
