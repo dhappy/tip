@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   resources :directories
 
-  resources :entries, path: :e
+  resources :entries, path: :e, constraints: { id: /.*/ }
 
   resources :spaces
 
