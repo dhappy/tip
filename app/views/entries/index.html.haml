@@ -1,3 +1,6 @@
-%ul
-  - @entries.each do |entry|
-    %li= entry.name
+- if @entries.empty?
+  %h1= link_to 'Hugo Award Winners', '/e/QmZbF7ZqXvTXwiwhaJWMUQMJtFt3HvGWiZeBM5TFdo9TMu'
+- else
+  %ul
+    - @entries.each do |entry|
+      %li= link_to entry.code, "/e/#{entry.code}"

@@ -2,9 +2,9 @@ require 'net/http'
 
 class Link < Entry
   def destination
-    binding.pry
     if not super
-      query = "#{@config.host}:#{@config.port}/api/v0/block/get?arg=#{code}"
+      config = Rails.application.config.tip.ipfs
+      query = "#{config.host}:#{config.port}/api/v0/block/get?arg=#{code}"
       ret = Net::HTTP.get(URI.parse(query))
     
       if ret.length > 6 && ret[0..1] == "\n\u0010" # symlink?

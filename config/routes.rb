@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
+  
   resources :links
 
   resources :references
@@ -14,11 +15,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'lookup#root'
-
-  get 'l/:hash' => 'lookup#hash'
-
-  get 'l/:code' => 'lookup#code'
+  root 'entries#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

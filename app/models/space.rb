@@ -1,7 +1,7 @@
 require 'net/http'
 
 class Space < ActiveRecord::Base
-  has_and_belongs_to_many :entries
+  has_and_belongs_to_many :entries, uniq: true
 
   def lookup(name)
     parts = name.split(/\//)
