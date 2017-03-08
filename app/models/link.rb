@@ -1,16 +1,32 @@
 require 'net/http'
 
-class Link < Entry
+class Link < Directory
+  def references
+    if super.empty?
+      if dest = @@space.lookup(destination)
+        super << Reference.find_or_create_by(
+          {
+            name: destination,
+            entry: dest
+          }
+        )
+      end
+    end
+    super
+  end
+
+  def whole?
+    references.any?
+  end
+  
   def destination
     if not super
-      query = "#{@config.host}:#{@config.port}/api/v0/block/get?arg=#{code}"
+      config = Rails.application.config.tip.ipfs
+      query = "#{config.host}:#{config.port}/api/v0/block/get?arg=#{code}"
       ret = Net::HTTP.get(URI.parse(query))
-    
-      if ret.length > 6 && ret[0..1] == "\n\u0010" # symlink?
-        self.destination = ret[6..-1].force_encoding('utf-8')
-      else
-        raise "Not a link"
-      end
+
+      dest = ret[6..-1].force_encoding('utf-8')
+      self.update_attribute(:destination, dest)
     end
     super
   end

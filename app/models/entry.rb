@@ -5,31 +5,35 @@ class Entry < ActiveRecord::Base
   has_and_belongs_to_many :spaces
   has_many :parents, class_name: 'Reference'
 
-  @base_find_or_create_by = self.method(:find_or_create_by)
-
-  def types
+  @@space = Space.first_or_create()
+  
+  def self.types
     %w{DNE Directory Blob Ukn Link}
   end
   
   def self.find_or_create_by(args)
-    if args.length == 1 && args[:code]
-      entry = find_by(args)
+    entry = find_by(args)
       
-      if !entry
-        listing = ls(args[:code])
-        links = listing[:Objects].collect{ |o| o[:Links] }.flatten
-        
-        if links
-          entry = Directory.create({ code: args[:code] })
-        else
-          logger.info("Unhandled Hash Return: #{args[:code]}")
+    if !entry
+      listing = ls(args[:code])
+      links = listing[:Objects].collect{ |o| o[:Links] }.flatten
+      
+      if links.any?
+        entry = Directory.create(args)
+        entry.references << links.map do |link|
+          Reference.find_or_create_by(
+            {
+              name: link[:Name],
+              entry: Entry.types[link[:Type]].constantize.find_or_create_by(
+                { code: link[:Hash] }
+                )
+            }
+          )
         end
       end
     end
-    
-    entry = @base_find_or_create_by.call(args) if not entry
-
-    entry
+  
+    entry || super
   end
   
   def mime

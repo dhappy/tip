@@ -1,0 +1,2 @@
+class Conglomeration < Entry
+end

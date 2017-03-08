@@ -10,8 +10,16 @@ default: &sqlite
   timeout: 5000
 
 development:
-  <<: *sqlite
-  database: db/development.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: tipspace
+  pool: 5
+  username: rails
+  password: rails
+
+#development:
+#  <<: *sqlite
+#  database: db/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

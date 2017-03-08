@@ -1,13 +1,15 @@
 %h1= @entry.code
 
+- if @entry.kind_of?(Link)
+  %h2= "Link: #{@entry.destination}"
+
 - if @entry.kind_of?(Directory)
   %ul
     - @entry.references.each do |ref|
       %li{ item: { type: ref.entry.type.downcase } }
         = link_to ref.name, "/e/#{ref.entry.code}"
-- elsif @entry.kind_of?(Link)
-  %h2= "Link: #{@entry.destination}"
-- else
+        
+- if @entry.kind_of?(Blob)
   %h2 Blob
 
 - if @entry.parents.any?

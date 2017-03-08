@@ -4,7 +4,7 @@ class EntriesController < ApplicationController
   end
 
   def index
-    @entries = Entry.all
+    @entries = @space.roots
   end
 
   def show
@@ -16,7 +16,9 @@ class EntriesController < ApplicationController
       @hash = id
       @entry = Entry.find_or_create_by(code: @hash)
 
-      @space.entries << @entry if @entry.parents.empty?
+      if @entry.parents.empty? && !@space.roots.include?(@entry)
+        @space.roots << @entry
+      end
     end
       
     if @entry.kind_of?(Blob)

@@ -1,3 +1,12 @@
-%ul
-  - @entries.each do |entry|
-    %li= entry.name
+%table
+  %thead
+    %tr
+      %th Name
+      %th Hash
+      %th % Complete
+  %tbody
+    - @entries.each do |entry|
+      %tr
+        %td= link_to entry.name, "/e/#{entry.code}"
+        %td= link_to entry.code, "/e/#{entry.code}"
+        %td= "#{entry.link_count[:whole]} / #{entry.link_count[:total]} (#{entry.percent_complete})"
