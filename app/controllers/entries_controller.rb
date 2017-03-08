@@ -4,7 +4,7 @@ class EntriesController < ApplicationController
   end
 
   def index
-    @entries = @space.entries
+    @entries = @space.roots
   end
 
   def show
@@ -16,8 +16,8 @@ class EntriesController < ApplicationController
       @hash = id
       @entry = Entry.find_or_create_by(code: @hash)
 
-      if @entry.parents.empty? && !@space.entries.include?(@entry)
-        @space.entries << @entry
+      if @entry.parents.empty? && !@space.roots.include?(@entry)
+        @space.roots << @entry
       end
     end
       

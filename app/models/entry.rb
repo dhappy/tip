@@ -6,11 +6,13 @@ class Entry < ActiveRecord::Base
   has_and_belongs_to_many :spaces
   has_many :parents, class_name: 'Reference'
 
-  @base_find_or_create_by = self.method(:find_or_create_by)
-
-  def types
+  @@space = Space.first_or_create()
+  
+  def self.types
     %w{DNE Directory Blob Ukn Link}
   end
+  
+  @base_find_or_create_by = self.method(:find_or_create_by)
   
   def self.find_or_create_by(args)
     if args.length == 1 && args[:code]
@@ -20,17 +22,15 @@ class Entry < ActiveRecord::Base
         listing = ls(args[:code])
         links = listing[:Objects].collect{ |o| o[:Links] }.flatten
         
-        if links
+        if links.any?
           entry = Directory.create({ code: args[:code] })
-        else
-          logger.info("Unhandled Hash Return: #{args[:code]}")
         end
       end
     end
     
-    entry = @base_find_or_create_by.call(args) if not entry
+    #@base_find_or_create_by.call(args) if not entry
 
-    entry
+    entry || super
   end
   
   def mime

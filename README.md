@@ -1,15 +1,28 @@
+# Tipspace
 
-The project I have in mind is a single file structure to contain all the data.
+A tipspace is a overriding conglomeration of directory trees.
 
-Files are named solely with their content type, for example: [https://github.com/dysbulic/tip/blob/master/department/happiness/svg](http://dhappy.org/.../department/happiness/svg)
+For example, Bob might publish a tree of symlinks of the format:
 
-This allows linking between directories that doesn't break dependencies: [https://github.com/dysbulic/tip/blob/master/art/by/Will%20Holcomb/The%20DoH](http://dhappy.org/.../art/by/Will%20Holcomb/The%20DoH/)
+.../award/Hugo/Best Novel/#{year}/ → .../book/by/#{author}/#{title}/
+.../award/Hugo/#{year}/Best Novel/ → .../book/by/#{author}/#{title}/
 
-There is a third special directory defined, ..., that, in the current implementation, is a symlink: ... → ../... in every directory except the root where ... → ..
+While Alice publishes:
 
-All links are forward through the tree, either relative to the current directory or through ....
+* .../book/by/Frank Herbert/Dune/xhtml
+* .../book/by/Frank Herbert/Dune/css
+* .../book/by/Frank Herbert/Dune/cover/jpg
 
-This both allows paths to resolve through symlinks over HTTP and for directories to be relocated without breaking links.
+Files are named solely with their content type. This allows more flexible linking between semantic locations with dependencies.
+
+Roger then creates a space in which paths are searched for in Bob's and Alice's trees sequentially.
+
+All of Bob's links will be broken except:
+
+* .../award/Hugo/Best Novel/1966/ → .../book/by/Frank Herbert/Dune/
+* .../award/Hugo/1966/Best Novel/ → .../book/by/Frank Herbert/Dune/
+
+All links are forward either relative to the current location, or through the "relative root": `...`.
 
 Information is inserted at as many places as coherent. For example, Frank Herbert's Dune would be resolvable through (roughly):
 

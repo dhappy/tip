@@ -1,6 +1,12 @@
-- if @entries.empty?
-  %h1= link_to 'Hugo Award Winners', '/e/QmZbF7ZqXvTXwiwhaJWMUQMJtFt3HvGWiZeBM5TFdo9TMu'
-- else
-  %ul
+%table
+  %thead
+    %tr
+      %th Name
+      %th Hash
+      %th % Complete
+  %tbody
     - @entries.each do |entry|
-      %li= link_to entry.code, "/e/#{entry.code}"
+      %tr
+        %td= link_to entry.name, "/e/#{entry.code}"
+        %td= link_to entry.code, "/e/#{entry.code}"
+        %td= entry.percent_complete
