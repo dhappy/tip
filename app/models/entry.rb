@@ -12,24 +12,28 @@ class Entry < ActiveRecord::Base
     %w{DNE Directory Blob Ukn Link}
   end
   
-  @base_find_or_create_by = self.method(:find_or_create_by)
-  
   def self.find_or_create_by(args)
-    if args.length == 1 && args[:code]
-      entry = find_by(args)
+    entry = find_by(args)
       
-      if !entry
-        listing = ls(args[:code])
-        links = listing[:Objects].collect{ |o| o[:Links] }.flatten
-        
-        if links.any?
-          entry = Directory.create({ code: args[:code] })
+    if !entry
+      listing = ls(args[:code])
+      links = listing[:Objects].collect{ |o| o[:Links] }.flatten
+      
+      if links.any?
+        entry = Directory.create(args)
+        entry.references << links.map do |link|
+          Reference.find_or_create_by(
+            {
+              name: link[:Name],
+              entry: Entry.types[link[:Type]].constantize.find_or_create_by(
+                { code: link[:Hash] }
+                )
+            }
+          )
         end
       end
     end
-    
-    #@base_find_or_create_by.call(args) if not entry
-
+  
     entry || super
   end
   

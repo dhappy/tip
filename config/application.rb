@@ -25,9 +25,15 @@ module Tip
 
     config.tip = DeepStruct.wrap({
                                    ipfs: {
-                                     host: 'http://ipfs.io',
-                                     port: 80
+                                     host: 'http://localhost',
+                                     port: 5001
                                    }
                                 })
+    # config.tip = DeepStruct.wrap({
+    #                                ipfs: {
+    #                                  host: 'http://ipfs.io',
+    #                                  port: 80
+    #                                }
+    #                             })
   end
 end

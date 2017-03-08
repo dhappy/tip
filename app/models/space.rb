@@ -6,7 +6,7 @@ class Space < ActiveRecord::Base
   def lookup(name)
     parts = name.split(/\//)
 
-    candidates = entries
+    candidates = roots
 
     while !candidates.empty? && !parts.empty?
       part = parts.shift

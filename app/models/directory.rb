@@ -4,31 +4,12 @@ class Directory < Entry
   has_and_belongs_to_many :references, join_table: :directories_references
   has_many :entries, through: :references
   
-  def self.find_or_create_by(opts)
-    find_by(opts) && return
-    
-    listing = Entry.ls(opts[:code])
-    links = listing[:Objects].collect{ |o| o[:Links] }.flatten
-
-    Directory.create(opts).tap do |this|
-      this.references << links.map do |link|
-        Reference.find_or_create_by(
-          {
-            name: link[:Name],
-            entry: Entry.types[link[:Type]].constantize.find_or_create_by(
-              { code: link[:Hash] }
-            )
-          }
-        )
-      end
-    end
-  end
-
   def percent_complete
-    if link_count[:whole] == 0
-      "No Links"
+    count = link_count
+    if count[:total] == 0
+      '100%'
     else
-      link_count[:whole] / (link_count[:total].nonzero? || 1)
+      "#{((count[:whole].to_f / (count[:total].nonzero? || 1)) * 100).round}%"
     end
   end
 
@@ -40,7 +21,7 @@ class Directory < Entry
       while unseen.any?
         candidate = unseen.pop
         if candidate.kind_of?(Directory)
-          unseen << candidate.entries.select do |entry|
+          unseen += candidate.entries.select do |entry|
             !seen.include?(entry) &&
               (entry.kind_of?(Link) || entry.kind_of?(Directory))
           end
@@ -51,6 +32,7 @@ class Directory < Entry
             count[:whole] += 1
           end
         end
+        seen << candidate
       end
     end
   end

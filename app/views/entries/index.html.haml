@@ -9,4 +9,4 @@
       %tr
         %td= link_to entry.name, "/e/#{entry.code}"
         %td= link_to entry.code, "/e/#{entry.code}"
-        %td= entry.percent_complete
+        %td= "#{entry.link_count[:whole]} / #{entry.link_count[:total]} (#{entry.percent_complete})"
