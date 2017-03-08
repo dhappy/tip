@@ -29,11 +29,11 @@ module Tip
                                      port: 5001
                                    }
                                 })
-    # config.tip = DeepStruct.wrap({
-    #                                ipfs: {
-    #                                  host: 'http://ipfs.io',
-    #                                  port: 80
-    #                                }
-    #                             })
+    config.tip = DeepStruct.wrap({
+                                   ipfs: {
+                                     host: 'http://ipfs.io',
+                                     port: 80
+                                   }
+                                })
   end
 end
