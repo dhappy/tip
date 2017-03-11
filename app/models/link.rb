@@ -18,6 +18,10 @@ class Link < Directory
   def whole?
     references.any?
   end
+
+  def resolves?
+    references.any?
+  end
   
   def destination
     if not super

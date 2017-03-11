@@ -4,11 +4,25 @@
   %h2= "Link: #{@entry.destination}"
 
 - if @entry.kind_of?(Directory)
-  %ul
-    - @entry.references.each do |ref|
-      %li{ item: { type: ref.entry.type.downcase } }
-        = link_to ref.name, "/e/#{ref.entry.code}"
-        
+  %table
+    %thead
+      %tr
+        %th Name
+        %th Destination
+        %th Exists
+        %th Size
+    %tbody
+      - @entry.references.each do |ref|
+        %tr{ item: { type: ref.entry.type.downcase } }
+          %td= link_to ref.name, "/e/#{ref.entry.code}"
+          - if ref.entry.kind_of?(Link)
+            %td= ref.entry.destination
+            %td= ref.entry.resolves? ? '✔' : nil
+          - else
+            %td= ref.entry.name
+            %td
+          %td= ref.entry.size
+
 - if @entry.kind_of?(Blob)
   %h2 Blob
 
