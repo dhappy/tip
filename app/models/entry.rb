@@ -11,6 +11,10 @@ class Entry < ActiveRecord::Base
   def self.types
     %w{DNE Directory Blob Ukn Link}
   end
+
+  def name
+    super || code
+  end
   
   def self.find_or_create_by(args)
     entry = find_by(args)
@@ -26,8 +30,11 @@ class Entry < ActiveRecord::Base
             {
               name: link[:Name],
               entry: Entry.types[link[:Type]].constantize.find_or_create_by(
-                { code: link[:Hash] }
-                )
+                {
+                  code: link[:Hash],
+                  size: link[:Size]
+                }
+              )
             }
           )
         end
