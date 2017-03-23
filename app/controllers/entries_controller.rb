@@ -1,6 +1,7 @@
 class EntriesController < ApplicationController
   def initialize(*args)
     @space = Space.first_or_create()
+    super
   end
 
   def index
@@ -8,9 +9,9 @@ class EntriesController < ApplicationController
   end
 
   def show
-    id =  params[:id]
+    id = params[:id]
 
-    if id.start_with?('.../')
+    if id = '...' || id.start_with?('.../')
       @entry = @space.lookup(id)
     else
       @hash = id

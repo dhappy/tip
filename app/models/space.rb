@@ -20,6 +20,14 @@ class Space < ActiveRecord::Base
       candidates.compact!
     end
 
-    candidates.first
+    if candidates.first.kind_of?(Directory)
+      Directory.new().tap do |dir|
+        candidates.reverse.each do |candidate|
+          dir.references += candidate.references if candidate.kind_of?(Directory)
+        end
+      end
+    else
+      candidates.first
+    end
   end
 end
