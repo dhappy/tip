@@ -11,7 +11,7 @@ class EntriesController < ApplicationController
   def show
     id = params[:id]
 
-    if id = '...' || id.start_with?('.../')
+    if id == '...' || id.start_with?('.../')
       @entry = @space.lookup(id)
     else
       @hash = id

@@ -4,7 +4,7 @@
 
 body { font-size: 14pt; }
 				     
-[item-type='directory'] {
+[item-type='directory'] td:first-child {
     padding-left: 1.25em;
     list-style: none;
     background-image: url('http://localhost/.../image/icon/Gnome/folder-remote.svg');
@@ -13,7 +13,7 @@ body { font-size: 14pt; }
     background-size: 1em;
 }
 
-[item-type='link'] {
+[item-type='link'] td:first-child {
     padding-left: 1.25em;
     list-style: none;
     background-image: url('http://localhost/.../image/icon/Gnome/emblems/emblem-symbolic-link.svg');
@@ -22,7 +22,7 @@ body { font-size: 14pt; }
     background-size: 1em;
 }
 
-[item-type='blob'] {
+[item-type='blob'] td:first-child {
     padding-left: 1.25em;
     list-style: none;
     background-image: url('http://localhost/.../image/icon/Gnome/mimetypes/text-x-preview.svg');
