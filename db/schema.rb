@@ -11,10 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170310104922) do
+ActiveRecord::Schema.define(version: 20170415135606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "directories_mounts", id: false, force: :cascade do |t|
+    t.integer "directory_id", null: false
+    t.integer "mount_id",     null: false
+  end
 
   create_table "directories_references", id: false, force: :cascade do |t|
     t.integer "directory_id", null: false

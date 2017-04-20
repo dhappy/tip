@@ -26,4 +26,7 @@ class EntriesController < ApplicationController
       send_data @entry.content, type: 'text/html', disposition: 'inline'
     end
   end
+
+  def create
+  end
 end

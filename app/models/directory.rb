@@ -3,6 +3,9 @@ require 'net/http'
 class Directory < Entry
   has_and_belongs_to_many :references, join_table: :directories_references
   has_many :entries, through: :references
+  has_and_belongs_to_many :mounts,
+                          class_name: 'Entry',
+                          join_table: :directories_mounts
   
   def percent_complete
     count = link_count
