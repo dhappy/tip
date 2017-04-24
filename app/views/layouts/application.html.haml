@@ -12,5 +12,15 @@
     - if alert
       %p.alert.alert-danger= alert
 
+    %ul.nav.nav-tabs.nav-justified
+      %li.active{ role: :presentation }= link_to 'Mounts'
+      - if @open_files.empty?
+        %li{ role: :presentation }= link_to '/'
+      - else
+        - @open_files.each do |file|
+          %li{ role: :presentation }= file.name
+      %li{ role: :presentation }
+        .glyphicon.glyphicon-link
+    
     = yield
 

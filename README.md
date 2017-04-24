@@ -1,6 +1,11 @@
 # Tipspace
 
-A tipspace is a overriding conglomeration of directory trees.
+A tipspace is an exploration in potentials for extension to the traditional unix filesystem.
+
+There are two primary differences:
+
+* Additive Mounts: Multiple filesystems may be mounted at the same location and their contents are conglomerated. This opens the doors to collisions. Currently, those are handled by always taking the first instance encountered.
+* Relative Root: The special directory `...` recurses up the directory tree checking at each level for the presence of the requested file.
 
 For example, Bob might publish a tree of symlinks of the format:
 
